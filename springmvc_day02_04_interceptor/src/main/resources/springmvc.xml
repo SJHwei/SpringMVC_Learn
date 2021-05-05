@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- beans是IOC的，context可以加注解 -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--开启注解扫描-->
+    <context:component-scan base-package="cn.itcast"></context:component-scan>
+
+    <!--视图解析器对象，类名是固定的-->
+    <bean id="internalResourceViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <!--文件所在目录-->
+        <property name="prefix" value="/WEB-INF/pages/"></property>
+        <!--文件的后缀名-->
+        <property name="suffix" value=".jsp"></property>
+    </bean>
+
+    <!--前端控制器，哪些资源不进行拦截-->
+    <mvc:resources mapping="/js/**" location="/js/" /> <!--javascript-->
+    <mvc:resources mapping="/images/**" location="/images/" /> <!--图片-->
+    <mvc:resources mapping="/css/**" location="/css/" /> <!--样式-->
+
+    <!--配置拦截器-->
+    <mvc:interceptors>
+        <!--配置拦截器-->
+        <mvc:interceptor>
+            <!--下面两个配置一个即可，配置拦截的，那剩下的就是不拦截的-->
+            <!--要拦截的具体的方法-->
+            <mvc:mapping path="/user/*"/>
+            <!--不要拦截的方法
+            <mvc:exclude-mapping path=""/>
+            -->
+            <!--配置拦截器对象-->
+            <bean class="cn.itcast.interceptor.MyInterceptor1" />
+        </mvc:interceptor>
+
+        <!--配置第二个拦截器-->
+        <mvc:interceptor>
+            <!--下面两个配置一个即可，配置拦截的，那剩下的就是不拦截的-->
+            <!--要拦截的具体的方法-->
+            <mvc:mapping path="/**"/>
+            <!--不要拦截的方法
+            <mvc:exclude-mapping path=""/>
+            -->
+            <!--配置拦截器对象-->
+            <bean class="cn.itcast.interceptor.MyInterceptor2" />
+        </mvc:interceptor>
+    </mvc:interceptors>
+    
+    <!--开启SpringMVC框架注解的支持。配置后，默认处理器适配器，处理器映射器都配上了-->
+    <!--最后一步，让自己配的这个类型转换器类也生效，因为前面那个默认处理器适配器和处理器映射器生效，所以如果想要自定义的类型转换器也生效，也需要在下面配置-->
+    <mvc:annotation-driven />
+</beans>

@@ -1,0 +1,2 @@
+2021-04-26 21:15:39,856 0      [           main] INFO  ClassPathXmlApplicationContext  - Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@78e67e0a: startup date [Mon Apr 26 21:15:39 GMT+08:00 2021]; root of context hierarchy
+2021-04-26 21:15:39,900 44     [           main] INFO  ry.xml.XmlBeanDefinitionReader  - Loading XML bean definitions from class path resource [applicationContext.xml]

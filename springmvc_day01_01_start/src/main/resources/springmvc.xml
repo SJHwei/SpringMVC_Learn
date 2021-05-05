@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- beans是IOC的，context可以加注解 -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--开启注解扫描-->
+    <context:component-scan base-package="cn.itcast"></context:component-scan>
+
+    <!--视图解析器对象，类名是固定的-->
+    <bean id="internalResourceViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <!--文件所在目录-->
+        <property name="prefix" value="/WEB-INF/pages/"></property>
+        <!--文件的后缀名-->
+        <property name="suffix" value=".jsp"></property>
+    </bean>
+
+    <!--配置自定义类型转换器。框架自己提供了很多的类型转换器，它都在下面的组件中注册完了。所以我们需要把自己写的类型转换器也在这个组件中注册一下。这样自己的转换器也就可以用了。-->
+    <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+        <property name="converters">
+            <set>
+                <bean class="cn.itcast.utils.StringToDateConverter"></bean>
+            </set>
+        </property>
+    </bean>
+
+    <!--开启SpringMVC框架注解的支持。配置后，默认处理器适配器，处理器映射器都配上了-->
+    <!--最后一步，让自己配的这个类型转换器类也生效，因为前面那个默认处理器适配器和处理器映射器生效，所以如果想要自定义的类型转换器也生效，也需要在下面配置-->
+    <mvc:annotation-driven conversion-service="conversionService"/>
+</beans>
